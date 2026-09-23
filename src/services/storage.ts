@@ -1086,3 +1086,34 @@ export class StorageService {
     this.init();
   }
 }
+import { Product } from '../types';
+
+// Link API kết nối trung gian đến MongoDB Atlas của bạn (Thay URL của bạn vào đây)
+const MONGO_API_URL = 'https://mongodbatlas.com'; 
+
+// Hàm lấy sản phẩm từ MongoDB thay vì LocalStorage
+export const getProducts = async (): Promise<Product[]> => {
+  try {
+    const response = await fetch(`${MONGO_API_URL}/products`);
+    if (!response.ok) throw new Error('Không thể lấy dữ liệu');
+    return await response.json();
+  } catch (error) {
+    console.error("Lỗi kết nối MongoDB:", error);
+    return []; // Trả về mảng rỗng nếu lỗi
+  }
+};
+
+// Hàm lưu sản phẩm mới lên MongoDB đám mây
+export const saveProduct = async (newProduct: Product): Promise<boolean> => {
+  try {
+    const response = await fetch(`${MONGO_API_URL}/products`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newProduct),
+    });
+    return response.ok;
+  } catch (error) {
+    console.error("Lỗi lưu MongoDB:", error);
+    return false;
+  }
+};
