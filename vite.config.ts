@@ -9,6 +9,8 @@ export default defineConfig(() => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
+         build: {
+    chunkSizeWarningLimit: 1000, 
       },
     },
     server: {
